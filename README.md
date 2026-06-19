@@ -22,7 +22,8 @@
 | **기술 스택** | React 18 UMD + Babel Standalone (빌드리스), 순수 SVG 지도, Web Speech API |
 | **실데이터** | 공공데이터포털 `data.go.kr` KLID 신호제어기 신호잔여시간 API (서울) |
 | **인프라** | Cloudflare Worker 프록시(CORS 우회), localStorage 설정 저장 |
-| **상태** | `(완료)` 제출본 — 라이브 연동 + 시뮬레이션 폴백 모두 동작 |
+| **상태** | `(완료)` 제출본 → [라이브 데모](https://blackdew.github.io/klp-traffic-view/) 배포 완료. 실연동 + 시뮬레이션 폴백 모두 동작 |
+| **라이선스** | [MIT](LICENSE) |
 
 ---
 
@@ -41,6 +42,7 @@
 
 1. **라이브 데모 (권장)**: [blackdew.github.io/klp-traffic-view](https://blackdew.github.io/klp-traffic-view/) — 설치 없이 바로 실행. 소스 버전을 GitHub Pages로 서빙해 로딩이 빠름.
 2. **오프라인 단일 파일**: 루트의 [`신호등 길찾기 앱.html`](신호등%20길찾기%20앱.html)을 더블클릭 — 모든 코드·에셋이 인라인된 23MB 번들이라 **인터넷 없이도** 열림(첫 로딩 시 23MB 다운로드). 시연·배포 사본 전달용.
+   > ⚠️ 이 번들은 **원본 제출 시점 스냅샷**이라 라이브 데모(소스 최신)와 다를 수 있습니다 — 이후의 데모 배지·모듈 분리 개선은 미반영. 최신 동작은 라이브 데모나 소스 버전을 사용하세요.
 3. **로컬 소스 서버**: 개발용. `traffic_view/` 폴더를 로컬 서버로 서빙 (jsx를 `fetch`하므로 `file://` 직접 열기는 CORS로 실패).
    ```bash
    python3 -m http.server 8000   # 저장소 루트에서
@@ -59,19 +61,22 @@
 klp-traffic-view/
 ├── index.html                 ← 라이브 데모 진입점 (GitHub Pages, 소스 버전 로드)
 ├── favicon.svg                ← 앱 아이콘 (3색 신호등)
+├── LICENSE                    ← MIT
 ├── README.md                  ← 이 분석 문서
 ├── prd.md                     ← 데모 다듬기 작업 명세
-├── 신호등 길찾기 앱.html        ← 오프라인 단일 파일 번들 (23MB, 더블클릭 실행)
+├── 신호등 길찾기 앱.html        ← 오프라인 단일 파일 번들 (23MB, 원본 제출 스냅샷)
 ├── traffic_view.pdf           ← 제출 보고서 (157KB)
+├── tests/data.test.js         ← 타이밍 로직 단위 테스트 (node tests/data.test.js)
 └── traffic_view/              ← 소스 (모듈 분리)
-    ├── traffic_view.html      ← 진입점 (React/Babel CDN + jsx 4개 로드)
+    ├── traffic_view.html      ← (호환용) 루트 index.html 로 리다이렉트
     ├── data.jsx               ← 경로·신호 데이터 + 타이밍 알고리즘 (핵심 로직)
     ├── signal_api.jsx         ← data.go.kr 실시간 신호 API 연동 레이어
+    ├── icons.jsx              ← 순수 SVG 아이콘 컴포넌트 (app.jsx 에서 분리)
     ├── map.jsx                ← SVG 절차적 도시 지도 + 경로·신호·보행자 렌더
     ├── app.jsx                ← 화면 4종 + 앱 셸 + 마스터 시계 + 음성엔진
     ├── proxy/cloudflare-worker.js  ← CORS 우회 프록시 (배포 가이드 주석 포함)
-    ├── screenshots/           ← 개발 단계 스크린샷 19종 (a11y·dark·nav·live 등)
-    └── uploads/               ← API 원본 응답 샘플(api.txt) + 참고 이미지
+    ├── screenshots/           ← 개발 단계 스크린샷 (a11y·dark·nav·live 등)
+    └── uploads/               ← 개발 참고 자료 (API 응답 샘플 api.txt + 참고 이미지, 앱 비사용)
 ```
 
 ---
@@ -92,7 +97,7 @@ klp-traffic-view/
 - 응답 1행 = 교차로 1개. 방향(nt/et/st/wt…) × 종류(보행 `Pdsg`/직진/좌회전…) 매트릭스. **보행신호(`Pdsg`)만** 추출, `RmndCs`는 1/10초 단위(36000↑은 "미정" 센티넬).
 - 지역 필터는 클라이언트에서 `stdgCd` 접두 `11`(서울)로 수행(서버 필터가 무시되는 API 특성 대응). 경로의 신호 5개에 실제 교차로를 수동 매핑하거나 자동 배정.
 - 브라우저 CORS 차단 → **Cloudflare Worker 프록시**가 `apis.data.go.kr`만 화이트리스트로 중계.
-- 5초 주기 폴링. 실패 시 자동으로 **시뮬레이션 모드**로 폴백(주기 기반 가상 신호) → 데이터 없어도 앱은 항상 동작. 상단 배지로 `실시간 연동 / 연결 중 / 시뮬레이션` 상태 표시.
+- 5초 주기 폴링. 실패 시 자동으로 **시뮬레이션 모드**로 폴백(주기 기반 가상 신호) → 데이터 없어도 앱은 항상 동작. 상단 배지로 `서울 실시간 신호 연동 / 연결 중 / 시뮬레이션 모드 · 데모` 상태 표시.
 
 ### 4. 화면 흐름 — `app.jsx`
 `search → summary → nav → done` 4단계 상태머신.
