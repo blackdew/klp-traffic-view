@@ -2,57 +2,14 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- 진입점은 저장소 루트의 index.html로 일원화되었습니다.
+     이 파일은 기존 경로(traffic_view/traffic_view.html) 호환을 위한 리다이렉트입니다.
+     React/Babel CDN·스타일 등 실제 부트스트랩은 ../index.html 한 곳에만 둡니다(#11). -->
+<meta http-equiv="refresh" content="0; url=../index.html" />
 <title>신호등 길찾기 · TrafficView</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
-  html, body { height: 100%; }
-  body {
-    background: #E4E1DA;
-    font-family: 'Pretendard', system-ui, sans-serif;
-    display: flex; align-items: center; justify-content: center;
-    min-height: 100vh; padding: 24px;
-  }
-  /* phone-sized web-app viewport */
-  #phone {
-    position: relative;
-    width: 390px; height: 844px;
-    max-height: calc(100vh - 48px);
-    background: #F3F1EC;
-    border-radius: 42px;
-    overflow: hidden;
-    box-shadow: 0 30px 70px rgba(28,29,33,.28), 0 0 0 10px #1C1D21, 0 0 0 11px #34353a;
-  }
-  #root { position: absolute; inset: 0; }
-  button:active { opacity: .82; }
-  ::-webkit-scrollbar { width: 0; height: 0; }
-  @keyframes tvwave { 0%,100% { height: 5px; } 50% { height: 16px; } }
-  @keyframes tvpulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
-  @media (max-width: 460px) {
-    body { padding: 0; }
-    #phone { width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; box-shadow: none; }
-  }
-</style>
+<script>location.replace("../index.html");</script>
 </head>
 <body>
-  <div id="phone"><div id="root"></div></div>
-  <template id="__bundler_thumbnail">
-    <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
-      <rect width="240" height="240" rx="52" fill="#1C1D21"/>
-      <circle cx="120" cy="74" r="22" fill="#E5484D"/>
-      <circle cx="120" cy="120" r="22" fill="#E8A317"/>
-      <circle cx="120" cy="166" r="22" fill="#1FA463"/>
-      <rect x="150" y="52" width="6" height="136" rx="3" fill="#3A3E48"/>
-      <path d="M168 60 L192 60 L192 84" stroke="#1FA463" stroke-width="6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </template>
-  <script type="text/babel" src="data.jsx"></script>
-  <script type="text/babel" src="signal_api.jsx"></script>
-  <script type="text/babel" src="map.jsx"></script>
-  <script type="text/babel" src="app.jsx"></script>
+  <p>앱 진입점이 이동했습니다 → <a href="../index.html">../index.html</a></p>
 </body>
 </html>
