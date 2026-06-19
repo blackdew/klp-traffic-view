@@ -22,7 +22,7 @@ argument-hint: "[--security|--docs|--quality] (선택, 기본: 전체 점검)"
 ```
 점검→이슈 등록 진행:
 - [ ] 1. 점검 — 카테고리별 스캔 (보안·타입·데드코드·문서·품질)
-- [ ] 2. 트리아지 — High/Medium/Low 분류, 사소한 Low는 체크리스트 1건으로 묶기
+- [ ] 2. 트리아지 — 기존 open 이슈와 대조(중복 제거) → High/Medium/Low 분류, 사소한 Low는 묶기
 - [ ] 3. 라벨 준비 — priority:high/medium/low + 배치 출처 라벨
 - [ ] 4. 본문 작성 — 각 이슈에 배경·작업·완료 기준
 - [ ] 5. 일괄 생성 — gh issue create
@@ -37,7 +37,15 @@ argument-hint: "[--security|--docs|--quality] (선택, 기본: 전체 점검)"
 
 ### 2. 트리아지
 
-각 발견을 심각도로 나눈다:
+**먼저 기존 open 이슈와 대조해 중복을 제거한다.** 같은 점검을 다시 돌리면 이미 등록된 발견이 또 나오는데, 그대로 등록하면 백로그가 오염된다.
+
+```bash
+gh issue list --state open --limit 50 --json number,title -q '.[] | "#\(.number) \(.title)"'
+```
+
+이미 추적 중인 발견은 건너뛰고 **새 발견만** 다음으로 보낸다. (이슈 등록이 아니라 *해결*이 목적이면 `resolving-github-issues`로 넘어간다.)
+
+남은 새 발견을 심각도로 나눈다:
 - **High**: 동작을 오도하거나(예: 코드와 정반대인 주석), 정합성이 깨진 산출물.
 - **Medium**: 테스트 부재, 거대 파일, 중복, 유지보수 부채.
 - **Low**: README 드리프트, 사소한 정비.
