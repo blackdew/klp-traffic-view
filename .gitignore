@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+
+# 에디터 / IDE
+.vscode/
+.idea/
+*.swp
+
+# Claude Code 로컬 설정
+.claude/
