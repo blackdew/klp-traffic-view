@@ -6,5 +6,6 @@
 .idea/
 *.swp
 
-# Claude Code 로컬 설정
-.claude/
+# Claude Code 로컬 설정 (skills/만 추적, 나머지는 제외)
+.claude/*
+!.claude/skills/
