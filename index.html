@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>신호등 길찾기 · TrafficView</title>
+<meta name="description" content="횡단보도 신호 잔여시간을 받아 '언제 건너고 어떤 속도로 걸어야 신호 대기 없이 도착하는지'를 안내하는 보행자 내비게이션 웹앱." />
+<meta name="theme-color" content="#1C1D21" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="TrafficView" />
+<!-- 링크 공유 미리보기 (포트폴리오 공유용) -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="신호등 길찾기 · TrafficView" />
+<meta property="og:description" content="신호를 가장 적게 기다리는 보행을 안내하는 신호등 인지형 길찾기 앱." />
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="apple-touch-icon" href="favicon.svg" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+  html, body { height: 100%; }
+  body {
+    background: #E4E1DA;
+    font-family: 'Pretendard', system-ui, sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 24px;
+  }
+  /* phone-sized web-app viewport */
+  #phone {
+    position: relative;
+    width: 390px; height: 844px;
+    max-height: calc(100vh - 48px);
+    background: #F3F1EC;
+    border-radius: 42px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(28,29,33,.28), 0 0 0 10px #1C1D21, 0 0 0 11px #34353a;
+  }
+  #root { position: absolute; inset: 0; }
+  button:active { opacity: .82; }
+  ::-webkit-scrollbar { width: 0; height: 0; }
+  @keyframes tvwave { 0%,100% { height: 5px; } 50% { height: 16px; } }
+  @keyframes tvpulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  /* 초기 로딩 인디케이터 (React 마운트 시 #root와 함께 교체되어 사라짐) */
+  #tv-loading {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 18px; background: #F3F1EC;
+  }
+  #tv-loading .dots { display: flex; gap: 10px; }
+  #tv-loading .dots span { width: 14px; height: 14px; border-radius: 50%; animation: tvpulse 1s ease-in-out infinite; }
+  #tv-loading .dots span:nth-child(1) { background: #E5484D; animation-delay: 0s; }
+  #tv-loading .dots span:nth-child(2) { background: #E8A317; animation-delay: .2s; }
+  #tv-loading .dots span:nth-child(3) { background: #1FA463; animation-delay: .4s; }
+  #tv-loading .label { font-size: 14px; font-weight: 700; color: #6B7079; }
+  @media (max-width: 460px) {
+    body { padding: 0; }
+    #phone { width: 100vw; height: 100vh; max-height: 100vh; border-radius: 0; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+  <div id="phone">
+    <div id="root">
+      <div id="tv-loading">
+        <div class="dots"><span></span><span></span><span></span></div>
+        <div class="label">신호를 불러오는 중…</div>
+      </div>
+    </div>
+  </div>
+  <script type="text/babel" src="traffic_view/data.jsx"></script>
+  <script type="text/babel" src="traffic_view/signal_api.jsx"></script>
+  <script type="text/babel" src="traffic_view/map.jsx"></script>
+  <script type="text/babel" src="traffic_view/app.jsx"></script>
+</body>
+</html>

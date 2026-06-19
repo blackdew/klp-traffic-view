@@ -173,7 +173,7 @@ function DataBadge({ source }) {
   const map = {
     connecting: { c: C.amber, t: "서울 실시간 연결 중…" },
     live: { c: C.green, t: "서울 실시간 신호 연동" },
-    sim: { c: C.ink3, t: "시뮬레이션 모드" },
+    sim: { c: C.ink3, t: "시뮬레이션 모드 · 데모" },
   };
   const s = map[source] || map.sim;
   return (
