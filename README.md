@@ -5,6 +5,12 @@
 
 보행 경로 상의 **횡단보도 신호등 잔여시간**을 실시간으로 받아, **언제 건너고 어떤 속도로 걸어야 신호 대기 없이 도착하는지**를 안내하는 모바일 웹앱. 일반 지도앱이 "최단 거리"를 안내한다면, 이 앱은 **"신호를 가장 적게 기다리는 보행"** 을 안내하는 것이 핵심 차별점.
 
+### ▶ [라이브 데모 열기](https://blackdew.github.io/klp-traffic-view/)
+
+[![데모](https://img.shields.io/badge/live%20demo-▶%20실행-1FA463?style=for-the-badge)](https://blackdew.github.io/klp-traffic-view/)
+
+> 데모는 API 키 없이 **시뮬레이션 모드**로 동작합니다(상단 배지로 표시). 실데이터 연동 방법은 아래 [API 키 설정](#실행-방법) 참고.
+
 ---
 
 ## 한눈에 보기
@@ -20,15 +26,25 @@
 
 ---
 
+## 화면
+
+| 검색 | 경로 요약 | 권장속도 내비 | 접근성(고대비) |
+|:---:|:---:|:---:|:---:|
+| <img src="traffic_view/screenshots/01-feat.png" width="180" alt="도착지 검색 + 설정" /> | <img src="traffic_view/screenshots/01-nav.png" width="180" alt="경로 요약 — 예상 대기·현재 초록불" /> | <img src="traffic_view/screenshots/01-check.png" width="180" alt="권장 보행속도 게이지" /> | <img src="traffic_view/screenshots/01-a11y.png" width="180" alt="접근성 고대비 모드" /> |
+| 도착지 검색·3중 테마 설정 | 신호 5개·예상 대기·현재 초록불 | 초록불 역산 권장속도 안내 | 고대비·큰 글씨·음성 강제 |
+
+---
+
 ## 실행 방법
 
-빌드 도구가 필요 없습니다. 두 가지 방법:
+빌드 도구가 필요 없습니다. 용도에 따라 세 가지 방법:
 
-1. **단일 파일 (가장 간단)**: 루트의 [`신호등 길찾기 앱.html`](신호등%20길찾기%20앱.html)을 브라우저로 열기 — 모든 코드·에셋이 인라인된 23MB 번들. 더블클릭만으로 실행.
-2. **소스 버전**: `traffic_view/` 폴더를 로컬 서버로 서빙 (jsx를 `fetch`하므로 `file://` 직접 열기는 CORS로 실패).
+1. **라이브 데모 (권장)**: [blackdew.github.io/klp-traffic-view](https://blackdew.github.io/klp-traffic-view/) — 설치 없이 바로 실행. 소스 버전을 GitHub Pages로 서빙해 로딩이 빠름.
+2. **오프라인 단일 파일**: 루트의 [`신호등 길찾기 앱.html`](신호등%20길찾기%20앱.html)을 더블클릭 — 모든 코드·에셋이 인라인된 23MB 번들이라 **인터넷 없이도** 열림(첫 로딩 시 23MB 다운로드). 시연·배포 사본 전달용.
+3. **로컬 소스 서버**: 개발용. `traffic_view/` 폴더를 로컬 서버로 서빙 (jsx를 `fetch`하므로 `file://` 직접 열기는 CORS로 실패).
    ```bash
-   cd traffic_view && python3 -m http.server 8000
-   # http://localhost:8000/traffic_view.html
+   python3 -m http.server 8000   # 저장소 루트에서
+   # http://localhost:8000/   (또는 traffic_view/traffic_view.html)
    ```
 
 > 🔑 **API 키 설정**: 실시간 연동을 켜려면 [공공데이터포털 `data.go.kr`](https://www.data.go.kr)에서 KLID 신호제어기 신호잔여시간 API 활용신청 후 발급받은 **서비스키**를 `traffic_view/signal_api.jsx`의 `API_KEY`(현재 `"YOUR_SERVICE_KEY"` placeholder)에 넣으세요.
@@ -41,8 +57,11 @@
 
 ```
 klp-traffic-view/
+├── index.html                 ← 라이브 데모 진입점 (GitHub Pages, 소스 버전 로드)
+├── favicon.svg                ← 앱 아이콘 (3색 신호등)
 ├── README.md                  ← 이 분석 문서
-├── 신호등 길찾기 앱.html        ← 배포용 단일 파일 번들 (23MB, 더블클릭 실행)
+├── prd.md                     ← 데모 다듬기 작업 명세
+├── 신호등 길찾기 앱.html        ← 오프라인 단일 파일 번들 (23MB, 더블클릭 실행)
 ├── traffic_view.pdf           ← 제출 보고서 (157KB)
 └── traffic_view/              ← 소스 (모듈 분리)
     ├── traffic_view.html      ← 진입점 (React/Babel CDN + jsx 4개 로드)
